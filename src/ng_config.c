@@ -49,6 +49,7 @@ static void             _cb_slider_change(void *data, Evas_Object *obj);
 
 static void             _cb_box_add_launcher(void *data, void *data2);
 static void             _cb_box_add_taskbar(void *data, void *data2);
+static void             _cb_box_add_fruitbar(void *data, void *data2);
 static void             _cb_box_add_gadcon(void *data, void *data2);
 static void             _cb_box_del(void *data, void *data2);
 static void             _cb_box_config(void *data, void *data2);
@@ -272,6 +273,8 @@ _basic_create_widgets(E_Config_Dialog *cfd, Evas *evas, E_Config_Dialog_Data *cf
    e_widget_table_object_append(ot, ob, 0, 1, 1, 1, 1, 1, 1, 0);
    ob = e_widget_button_add(evas, D_("Launcher"), "widget/add", _cb_box_add_launcher, cfdata, NULL);
    e_widget_table_object_append(ot, ob, 1, 1, 1, 1, 1, 1, 1, 0);
+   ob = e_widget_button_add(evas, D_("Fruitbar"), "widget/add", _cb_box_add_fruitbar, cfdata, NULL);
+   e_widget_table_object_append(ot, ob, 1, 2, 1, 1, 1, 1, 1, 0);
    ob = e_widget_button_add(evas, D_("Gadcon"), "widget/add", _cb_box_add_gadcon, cfdata, NULL);
    e_widget_table_object_append(ot, ob, 0, 2, 1, 1, 1, 1, 1, 0);
    e_widget_frametable_object_append(of, ot, 0, 2, 1, 1, 1, 1, 1, 0);
@@ -395,6 +398,8 @@ _update_boxes(Ng *ng)
            ngi_taskbar_remove(box);
         else if (box->cfg->type == launcher)
            ngi_launcher_remove(box);
+        else if (box->cfg->type == fruitbar)
+           ngi_fruitbar_remove(box);
         else if (box->cfg->type == gadcon)
            ngi_gadcon_remove(box);
      }
@@ -411,6 +416,10 @@ _update_boxes(Ng *ng)
 
          case taskbar:
             ngi_taskbar_new(ng, cfg_box);
+            break;
+
+         case fruitbar:
+            ngi_fruitbar_new(ng, cfg_box);
             break;
 
          case gadcon:
@@ -453,6 +462,22 @@ _cb_box_add_launcher(void *data, void *data2)
 
    cfg_box = E_NEW(Config_Box, 1);
    cfg_box->type = launcher;
+   cfg_box->launcher_app_dir = eina_stringshare_add("default");
+   cfdata->cfg->boxes = eina_list_append(cfdata->cfg->boxes, cfg_box);
+
+   _update_boxes(cfdata->cfg->ng);
+
+   _load_box_tlist(cfdata);
+}
+
+static void
+_cb_box_add_fruitbar(void *data, void *data2)
+{
+   E_Config_Dialog_Data *cfdata = (E_Config_Dialog_Data *)data;
+   Config_Box *cfg_box;
+
+   cfg_box = E_NEW(Config_Box, 1);
+   cfg_box->type = fruitbar;
    cfg_box->launcher_app_dir = eina_stringshare_add("default");
    cfdata->cfg->boxes = eina_list_append(cfdata->cfg->boxes, cfg_box);
 
@@ -521,7 +546,10 @@ _basic_create_box_widgets(E_Config_Dialog *cfd, Evas *evas, E_Config_Dialog_Data
    E_Radio_Group *rg;
 
    o = e_widget_list_add(evas, 0, 0);
-   if (cfdata->cfg_box->type == launcher)
+
+   e_dialog_resizable_set(cfd->dia, EINA_TRUE);
+
+   if ((cfdata->cfg_box->type == launcher) || (cfdata->cfg_box->type == fruitbar))
      {
         cfdata->app_dir = eina_stringshare_add(cfdata->cfg_box->launcher_app_dir);
 
@@ -766,6 +794,12 @@ _load_box_tlist(E_Config_Dialog_Data *cfdata)
 
            case taskbar:
               snprintf(buf, sizeof(buf), "%i Taskbar", cnt);
+              blub = strdup(buf);
+              e_widget_ilist_append(cfdata->ilist, NULL, blub, NULL, cfg_box, blub);
+              break;
+
+           case fruitbar:
+              snprintf(buf, sizeof(buf), "%i Fruitbar", cnt);
               blub = strdup(buf);
               e_widget_ilist_append(cfdata->ilist, NULL, blub, NULL, cfg_box, blub);
               break;

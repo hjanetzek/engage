@@ -2,6 +2,7 @@
 
 static void      _ng_border_cb_border_menu_end(void *data, E_Menu *m);
 static void      _ng_border_menu_cb_close(void *data, E_Menu *m, E_Menu_Item *mi);
+static void      _ng_border_menu_cb_new(void *data, E_Menu *m, E_Menu_Item *mi);
 static void      _ng_border_menu_cb_iconify(void *data, E_Menu *m, E_Menu_Item *mi);
 static void      _ng_border_menu_cb_maximize(void *data, E_Menu *m, E_Menu_Item *mi);
 static void      _ng_border_menu_cb_unmaximize(void *data, E_Menu *m, E_Menu_Item *mi);
@@ -49,6 +50,19 @@ ngi_border_menu_show(Ngi_Box *box, E_Border *bd, Evas_Coord x, Evas_Coord y, int
                                                         "e/widgets/border/default/close"),
                                   "e/widgets/border/default/close");
      }
+
+   if (bd->desktop)
+   {
+      mi = e_menu_item_new(m);
+      e_menu_item_separator_set(mi, 1);
+      mi = e_menu_item_new(m);
+      e_menu_item_label_set(mi, D_("New Instance"));
+      e_menu_item_callback_set(mi, _ng_border_menu_cb_new, bd);
+      e_menu_item_icon_edje_set(mi,
+            e_theme_edje_file_get("base/theme/borders",
+               "e/widgets/border/default/new"),
+            "e/widgets/border/default/new");
+   }
 
    if (!bd->internal)
      {
@@ -117,6 +131,14 @@ _ng_border_cb_border_menu_end(void *data, E_Menu *m)
 
    //  if (ng) ngi_thaw(ng);
 }
+
+static void
+_ng_border_menu_cb_new(void *data, E_Menu *m, E_Menu_Item *mi)
+{
+   E_Border *bd = (E_Border *)data;
+   e_exec(e_util_zone_current_get(e_manager_current_get()), bd->desktop, NULL, NULL, NULL);
+}
+
 
 static void
 _ng_border_menu_cb_close(void *data, E_Menu *m, E_Menu_Item *mi)

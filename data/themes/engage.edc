@@ -1,9 +1,17 @@
+/*
+  The indicator icon is cortesy of
+  http://xf0rg0tt3nx.deviantart.com/
+*/
+
 #define BG_OFFSET 12
 #define HOVER_EFFECT 0
 #define TRANSLUCENT 1
+#define INDICATOR_ICON_WIDTH 10
+#define INDICATOR_ICON_HEIGHT 10
 
 images
 {
+	image:"indicator.png" COMP;
 	image:"itask_im0.png" COMP;
 	image:"itask_im1.png" COMP;
 	image:"itask_im2.png" COMP;
@@ -454,6 +462,7 @@ collections{
 					aspect_preference: BOTH;
 				}
 			}
+
 		}
 
 		programs {
@@ -571,6 +580,7 @@ collections{
 				transition: LINEAR 0.3;
 				target: "input_clip";
 			}
+
 			/* program {
 			 * 	name: "go_mouse_up";
 			 * 	signal: "e,state,mouse,up";
@@ -643,6 +653,33 @@ collections{
 					rel2.to: "background";
 				}
 			}
+
+         part {
+            name: "indicator";
+            type: IMAGE;
+            clip_to: "background";
+
+            description {
+               state: "default" 0.0;
+               visible: 0;
+            }
+
+            description {
+               state: "visible" 0.0;
+               image.normal: "indicator.png";
+               rel1 {
+                  to: "e.swallow.content";
+                  relative: 0.5 1.0;
+                  offset: (-1 * (INDICATOR_ICON_WIDTH/2)) (-1 * INDICATOR_ICON_HEIGHT);
+               }
+               rel2 {
+                  to: "e.swallow.content";
+                  relative: 0.5 1.0;
+                  offset: (INDICATOR_ICON_WIDTH/2) 0;
+               }
+            }
+         }
+
 		}
 
 		programs {
@@ -708,6 +745,25 @@ collections{
 				target: "go_big3";
 				after: "go_big";
 			}
+
+         program {
+            name: "indicate";
+            signal: "e,state,taskbar,indicated,on";
+            source: "e";
+            action: STATE_SET "visible" 0.0;
+            transition: LINEAR 0.2;
+            target: "indicator";
+         }
+
+         program {
+            name: "deindicate";
+            signal: "e,state,taskbar,indicated,off";
+            source: "e";
+            action: STATE_SET "default" 0.0;
+            transition: LINEAR 0.2;
+            target: "indicator";
+         }
+
 		}
 	}
 }

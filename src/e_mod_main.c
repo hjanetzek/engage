@@ -155,6 +155,10 @@ ngi_new(Config_Item *cfg)
             ngi_taskbar_new(ng, cfg_box);
             break;
 
+         case fruitbar:
+            ngi_fruitbar_new(ng, cfg_box);
+            break;
+
          case gadcon:
             ngi_gadcon_new(ng, cfg_box);
             break;
@@ -223,6 +227,8 @@ ngi_free(Ng *ng)
            ngi_taskbar_remove(box);
         else if (box->cfg->type == launcher)
            ngi_launcher_remove(box);
+        else if (box->cfg->type == fruitbar)
+           ngi_fruitbar_remove(box);
         else if (box->cfg->type == gadcon)
            ngi_gadcon_remove(box);
      }

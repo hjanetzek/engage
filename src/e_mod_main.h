@@ -31,6 +31,7 @@ typedef struct _Ng                 Ng;
 typedef struct _Ngi_Item           Ngi_Item;
 typedef struct _Ngi_Item_Launcher  Ngi_Item_Launcher;
 typedef struct _Ngi_Item_Taskbar   Ngi_Item_Taskbar;
+typedef struct _Ngi_Item_Fruitbar  Ngi_Item_Fruitbar;
 typedef struct _Ngi_Item_Gadcon    Ngi_Item_Gadcon;
 typedef struct _Ngi_Win            Ngi_Win;
 typedef struct _Ngi_Box            Ngi_Box;
@@ -84,7 +85,7 @@ struct _Config_Item
 
 struct _Config_Box
 {
-  enum { launcher, taskbar, gadcon } type;
+  enum { launcher, taskbar, gadcon, fruitbar } type;
 
   int            taskbar_skip_dialogs;
   int            taskbar_adv_bordermenu;
@@ -92,6 +93,13 @@ struct _Config_Box
   int            taskbar_show_desktop;
   int            taskbar_append_right;
   int            taskbar_group_apps;
+
+  int            fruitbar_skip_dialogs;
+  int            fruitbar_adv_bordermenu;
+  int            fruitbar_show_iconified;
+  int            fruitbar_show_desktop;
+  int            fruitbar_append_right;
+  int            fruitbar_group_apps;
 
   const char    *launcher_app_dir;
   int            launcher_lock_dnd;
@@ -245,6 +253,23 @@ struct _Ngi_Item_Taskbar
   const char  *class; /* store icccm.class...*/
 };
 
+struct _Ngi_Item_Fruitbar
+{
+  Ngi_Item base;
+
+  Evas_Object    *o_icon;
+  Evas_Object    *o_proxy;
+
+  //running tasks
+  E_Border       *border;
+  unsigned int border_was_fullscreen;
+  unsigned int urgent;
+  const char  *class; /* store icccm.class...*/
+
+  //launcher
+  Efreet_Desktop *app;
+};
+
 struct _Ngi_Item_Gadcon
 {
   Ngi_Item base;
@@ -342,6 +367,8 @@ void         ngi_border_menu_show             (Ngi_Box *box, E_Border *bd,
                                                int dir, Ecore_X_Time timestamp);
 
 Eina_Bool    ngi_object_theme_set(Evas_Object *obj, const char *part);
+
+
 
 extern Config *ngi_config;
 extern E_Config_DD *ngi_conf_edd;

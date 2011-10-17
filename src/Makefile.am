@@ -13,6 +13,9 @@ module_la_SOURCES = e_mod_main.c \
 		    ng_item.c \
 		    ng_launcher.c \
 		    ng_taskbar.c \
+			ng_fruitbar.c \
+			ng_fruitbar_taskbar.c \
+			ng_fruitbar_launcher.c \
 		    ng_config_instances.c \
 		    ng_box.c \
 		    ng_border_menu.c \
