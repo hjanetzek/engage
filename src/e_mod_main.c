@@ -155,11 +155,11 @@ ngi_new(Config_Item *cfg)
             ngi_taskbar_new(ng, cfg_box);
             break;
 
-         case fruitbar:
-            ngi_fruitbar_new(ng, cfg_box);
+         case gadcon:
+            ngi_gadcon_new(ng, cfg_box);
             break;
 
-         case gadcon:
+         case fruitbar:
             ngi_gadcon_new(ng, cfg_box);
             break;
         }
@@ -227,10 +227,10 @@ ngi_free(Ng *ng)
            ngi_taskbar_remove(box);
         else if (box->cfg->type == launcher)
            ngi_launcher_remove(box);
-        else if (box->cfg->type == fruitbar)
-           ngi_fruitbar_remove(box);
         else if (box->cfg->type == gadcon)
            ngi_gadcon_remove(box);
+        else if (box->cfg->type == fruitbar)
+           ngi_fruitbar_remove(box);
      }
 
    if (ng->animator)
@@ -847,14 +847,21 @@ ngi_item_activate(Ng *ng)
      {
 	if (it != ng->item_active)
 	  {
-
 	     ngi_item_mouse_out(ng->item_active);
 	     ngi_item_mouse_in(it);
 	     ng->item_active = it;
 	     _ngi_label_pos_set(ng);
-	     evas_object_show(ng->o_label);
-	     edje_object_signal_emit(ng->o_label, "e,state,label,show", "e");
-	     edje_object_part_text_set(ng->o_label, "e.text.label", it->label);
+
+             if (it->label)
+               {                  
+                  evas_object_show(ng->o_label);
+                  edje_object_signal_emit(ng->o_label, "e,state,label,show", "e");
+                  edje_object_part_text_set(ng->o_label, "e.text.label", it->label);
+               }
+             else
+               {
+                  evas_object_hide(ng->o_label);
+               }
 	  }
      }
    else
@@ -1289,19 +1296,18 @@ _ngi_zoom_function(Ng *ng, double to, double pos)
 static void
 _ngi_label_pos_set(Ng *ng)
 {
-   int off, h;
+   int off;
 
    if (!ng->item_active)
      return;
 
    off = (ng->size * ng->zoom) + ng->opt.edge_offset + TEXT_DIST;
-   h = ng->win->popup->h;
 
    switch (ng->cfg->orient)
      {
       case E_GADCON_ORIENT_BOTTOM:
 	 evas_object_move(ng->o_label, ng->item_active->pos + ng->size/2,
-			  (h + ng->hide_step) - off);
+			  (ng->win->popup->h + ng->hide_step) - off);
 	 break;
 
       case E_GADCON_ORIENT_TOP:
@@ -1309,7 +1315,7 @@ _ngi_label_pos_set(Ng *ng)
 			  (off - ng->hide_step));
 	 break;
       case E_GADCON_ORIENT_RIGHT:
-	 evas_object_move(ng->o_label, (h + ng->hide_step) - off,
+	 evas_object_move(ng->o_label, (ng->win->popup->w + ng->hide_step) - off,
 			  ng->item_active->pos + ng->size/2);
 	 break;
 

@@ -148,7 +148,10 @@ static void
 _free_data(E_Config_Dialog *cfd, E_Config_Dialog_Data *cfdata)
 {
    cfdata->cfg->config_dialog = NULL;
-   if (cfdata->cfg->ng) ngi_bar_lock(cfdata->cfg->ng, 0);
+
+   if (cfdata->cfg->ng)
+     ngi_bar_lock(cfdata->cfg->ng, 0);
+
    free(cfdata);
 }
 
@@ -371,7 +374,8 @@ _basic_apply_data(E_Config_Dialog *cfd, E_Config_Dialog_Data *cfdata)
      }
    else
      {
-	ngi_bar_lock(ng, 0);
+        if (ci->autohide == AUTOHIDE_NORMAL)
+          ng->hide = EINA_TRUE;
 	ng->hide_step = 0;
 	ng->hide_state = show;
 	ngi_reposition(ng);
@@ -546,9 +550,6 @@ _basic_create_box_widgets(E_Config_Dialog *cfd, Evas *evas, E_Config_Dialog_Data
    E_Radio_Group *rg;
 
    o = e_widget_list_add(evas, 0, 0);
-
-   e_dialog_resizable_set(cfd->dia, EINA_TRUE);
-
    if ((cfdata->cfg_box->type == launcher) || (cfdata->cfg_box->type == fruitbar))
      {
         cfdata->app_dir = eina_stringshare_add(cfdata->cfg_box->launcher_app_dir);
