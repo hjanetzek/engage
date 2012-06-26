@@ -27,7 +27,6 @@ _ngi_fruitbar_launcher_add_dnd_event_handlers(Ngi_Box *box)
      { "enlightenment/desktop",
         "enlightenment/border",
         "text/uri-list" };
-   if (!box) return;
 
    box->drop_handler = e_drop_handler_add
       (box->ng->win->drop_win, box,
@@ -42,8 +41,6 @@ _ngi_fruitbar_launcher_add_efreet_event_handlers(Ngi_Box *box)
    char buf[4096];
    Ecore_Event_Handler *h;
    Config_Box *cfg;
-
-   if (!box) return;
 
    cfg = box->cfg;
 
@@ -73,8 +70,6 @@ _ngi_fruitbar_launcher_add_efreet_event_handlers(Ngi_Box *box)
 void
 ngi_fruitbar_launcher_add_event_handlers(Ngi_Box *box)
 {
-    if (!box) return;
-
     _ngi_fruitbar_launcher_add_dnd_event_handlers(box);
     _ngi_fruitbar_launcher_add_efreet_event_handlers(box);
 }

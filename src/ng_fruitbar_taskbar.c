@@ -42,8 +42,6 @@ _ngi_fruitbar_taskbar_add_dnd_event_handlers(Ngi_Box *box)
 {
    const char *drop[] = {"text/uri-list","text/x-moz-url", "enlightenment/x-file"};
 
-   if (!box) return;
-
    // "enlightenment/border", "enlightenment/desktop",
    box->drop_handler = e_drop_handler_add(box->ng->win->drop_win, box,
                                           ngi_fruitbar_taskbar_cb_drop_enter, ngi_fruitbar_taskbar_cb_drop_move,
@@ -78,8 +76,6 @@ _ngi_fruitbar_taskbar_add_border_event_handlers(Ngi_Box *box)
 void
 ngi_fruitbar_taskbar_add_event_handlers(Ngi_Box *box)
 {
-    if (!box) return;
-
     _ngi_fruitbar_taskbar_add_dnd_event_handlers(box);
     _ngi_fruitbar_taskbar_add_border_event_handlers(box);
 }

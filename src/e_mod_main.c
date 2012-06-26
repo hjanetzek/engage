@@ -160,7 +160,7 @@ ngi_new(Config_Item *cfg)
             break;
 
          case fruitbar:
-            ngi_gadcon_new(ng, cfg_box);
+            ngi_fruitbar_new(ng, cfg_box);
             break;
         }
    }
@@ -223,16 +223,22 @@ ngi_free(Ng *ng)
    while(ng->boxes)
      {
         box = ng->boxes->data;
-        if (box->cfg->type == taskbar)
-           ngi_taskbar_remove(box);
-        else if (box->cfg->type == launcher)
-           ngi_launcher_remove(box);
-        else if (box->cfg->type == gadcon)
-           ngi_gadcon_remove(box);
-        else if (box->cfg->type == fruitbar)
-           ngi_fruitbar_remove(box);
+        switch (box->cfg->type)
+          {
+           case taskbar:
+              ngi_taskbar_remove(box);
+              break;
+           case launcher:
+              ngi_launcher_remove(box);
+              break;
+           case gadcon:
+              ngi_gadcon_remove(box);
+              break;
+           case fruitbar:
+              ngi_fruitbar_remove(box);
+              break;
+          }
      }
-
    if (ng->animator)
       ecore_animator_del(ng->animator);
 
@@ -1716,7 +1722,7 @@ _ngi_config_free()
      {
         EINA_LIST_FREE(ci->boxes, cfg_box)
 	  {
-	     if (cfg_box->type == launcher && cfg_box->launcher_app_dir)
+	     if (((cfg_box->type == launcher) || (cfg_box->type == fruitbar)) && cfg_box->launcher_app_dir)
 	       eina_stringshare_del(cfg_box->launcher_app_dir);
 
 	     if (cfg_box->type == gadcon)

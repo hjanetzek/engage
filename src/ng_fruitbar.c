@@ -1,6 +1,7 @@
 #include "e_mod_main.h"
 #include "ng_fruitbar.h"
 
+/*
 static int            _border_check          (Ngi_Box *box, E_Border *bd);
 static Ngi_Item_Fruitbar *_border_find        (Ngi_Box *box, E_Border *bd);
 
@@ -24,7 +25,7 @@ static void           _ngi_fruitbar_cb_drop_enter         (void *data, const cha
 static void           _ngi_fruitbar_cb_drop_move          (void *data, const char *type, void *event_info);
 static void           _ngi_fruitbar_cb_drop_end           (void *data, const char *type, void *event_info);
 static void           _ngi_fruitbar_cb_drop_leave         (void *data, const char *type, void *event_info);
-
+*/
 
 static Ecore_X_Atom ECOMORPH_ATOM_THUMBNAIL = 0;
 

@@ -362,6 +362,10 @@ void         ngi_gadcon_new                   (Ng *ng, Config_Box *cfg_box);
 void         ngi_gadcon_remove                (Ngi_Box *box);
 void         ngi_gadcon_config                (Ngi_Box *box);
 
+void         ngi_fruitbar_init                (void);
+void         ngi_fruitbar_new                 (Ng *ng, Config_Box *cfg_box);
+void         ngi_fruitbar_remove              (Ngi_Box *box);
+
 void         ngi_border_menu_show             (Ngi_Box *box, E_Border *bd,
                                                Evas_Coord x, Evas_Coord y,
                                                int dir, Ecore_X_Time timestamp);

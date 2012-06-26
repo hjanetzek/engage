@@ -6,7 +6,10 @@
 //Functions necesssary to overlay disappearing tasks with their launchers
 //corresponds
 void      ngi_fruitbar_taskbar_box_fill            (Ngi_Box *box);
+void      ngi_fruitbar_taskbar_add_event_handlers  (Ngi_Box *box);
+
 void      ngi_fruitbar_launcher_box_fill           (Ngi_Box *box);
+void      ngi_fruitbar_launcher_add_event_handlers (Ngi_Box *box);
 
 void      item_ngi_fruitbar_launcher_cb_free       (Ngi_Item *it);
 void      item_ngi_fruitbar_launcher_cb_drag_start (Ngi_Item *it);

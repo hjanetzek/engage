@@ -398,14 +398,21 @@ _update_boxes(Ng *ng)
    while(ng->boxes)
      {
         box = ng->boxes->data;
-        if (box->cfg->type == taskbar)
-           ngi_taskbar_remove(box);
-        else if (box->cfg->type == launcher)
-           ngi_launcher_remove(box);
-        else if (box->cfg->type == fruitbar)
-           ngi_fruitbar_remove(box);
-        else if (box->cfg->type == gadcon)
-           ngi_gadcon_remove(box);
+        switch (box->cfg->type)
+          {
+           case taskbar:
+              ngi_taskbar_remove(box);
+              break;
+           case launcher:
+              ngi_launcher_remove(box);
+              break;
+           case gadcon:
+              ngi_gadcon_remove(box);
+              break;
+           case fruitbar:
+              ngi_fruitbar_remove(box);
+              break;
+          }
      }
 
    ngi_freeze(ng);
@@ -536,6 +543,11 @@ _cb_box_del(void *data, void *data2)
 
       case gadcon:
          ngi_gadcon_remove(cfg_box->box);
+         break;
+
+      case fruitbar:
+         ngi_fruitbar_remove(cfg_box->box);
+         break;
      } /* switch */
 
    ngi_thaw(cfdata->cfg->ng);
